@@ -1,0 +1,30 @@
+/*========================= tablediv ==========================   border-bottom: 0.5px solid gray;*/
+
+.tablediv {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  flex: 1;
+}
+
+.tablediv > table {
+  border-collapse: collapse;
+
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.tablediv > table > tbody > tr > th {
+  padding: 15px;
+  border-radius: 6px;
+  text-align: left;
+  background-color: #f2f2f2;
+  font-size: 0.9rem;
+}
+.tablediv > table > tbody > tr > td {
+  text-align: left;
+  padding: 15px;
+
+  border-bottom: 0.5px solid #f2f2f2;
+  font-size: 0.8rem;
+}

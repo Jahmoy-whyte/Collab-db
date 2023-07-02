@@ -1,0 +1,17 @@
+.labelandtxt {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.labelandtxt > label {
+  font-size: 0.8rem;
+}
+.labelandtxt > select {
+  outline: none;
+  background-color: white;
+  border: 0.5px solid #b3b3b3;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}

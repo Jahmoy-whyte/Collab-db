@@ -1,0 +1,79 @@
+.maincontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  height: 100vh;
+}
+
+.formandbuttoncontainer {
+  margin-top: 10px;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: start;
+  flex: 1;
+  gap: 20px;
+}
+
+.formtag {
+  background-color: white;
+  padding: 30px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  width: 100%;
+}
+
+.dbiconandtitlediv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.dbiconandtitlediv > img {
+  width: 45px;
+  height: 45px;
+}
+
+.formtag > p {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.Buttonsdiv {
+  background-color: white;
+  padding: 30px;
+  max-width: 230px;
+  width: 100%;
+}
+
+.backbuttondiv {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 0.5px solid gray;
+}
+
+.backbuttondiv > div > p {
+  font-size: 0.8rem;
+}
+
+.backbuttondiv > div > h4 {
+  font-size: 0.9rem;
+}
+
+.buttondiv {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

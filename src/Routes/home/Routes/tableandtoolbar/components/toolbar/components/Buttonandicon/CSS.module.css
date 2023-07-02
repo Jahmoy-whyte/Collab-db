@@ -1,0 +1,16 @@
+.buttonandtxt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 6px;
+  padding: 0px 10px 0px 10px;
+  height: 30px;
+  gap: 5px;
+  border: none;
+  max-width: 200px;
+  background-color: black;
+}
+.buttonandtxt > p {
+  color: white;
+  font-size: 0.8rem;
+}

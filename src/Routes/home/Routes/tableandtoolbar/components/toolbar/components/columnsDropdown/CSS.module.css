@@ -1,0 +1,79 @@
+.csdropdown {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  background-color: black;
+  border: none;
+  border-radius: 6px;
+  height: 30px;
+  width: 100px;
+  padding-left: 5px;
+}
+
+.csdropdowntitle {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.csdropdowntitle > p {
+  color: white;
+  font-size: 0.8rem;
+}
+
+.csdropdown:hover > .csdropdownlistdiv {
+  display: flex;
+}
+
+.csdropdownlistdiv {
+  display: none;
+  flex-direction: column;
+
+  top: 30px;
+  left: 0px;
+  position: absolute;
+  padding: 10px 0px 10px 0px;
+  background-color: white;
+
+  border-radius: 6px;
+
+  width: 150px;
+
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  animation: displaymenu 0.5s;
+}
+
+.csdropdownlistdivitem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+
+  padding: 5px 10px 5px 10px;
+}
+
+.csdropdownlistdivitem > input {
+  accent-color: black;
+  transform: scale(1.5);
+}
+.csdropdownlistdivitem > label {
+  flex: 1;
+  text-align: left;
+  word-break: break-all;
+}
+
+.csdropdownlistdivitem > label:active {
+  transform: scale(0.95);
+}
+
+@keyframes displaymenu {
+  from {
+    top: 0px;
+    opacity: 0;
+  }
+  to {
+    top: 30px;
+    opacity: 1;
+  }
+}

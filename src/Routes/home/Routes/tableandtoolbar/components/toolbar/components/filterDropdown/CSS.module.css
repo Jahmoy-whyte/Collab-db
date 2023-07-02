@@ -1,0 +1,72 @@
+/*============= filter ========================================*/
+.filter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  padding: 5px;
+  border-radius: 6px;
+  position: relative;
+  border: 0.5px solid gray;
+  max-width: 200px;
+  height: 30px;
+  width: 130px;
+}
+
+.filter > span {
+  flex: 1;
+  gap: 5px;
+  display: flex;
+  flex-direction: row;
+  word-break: break-all;
+}
+
+.filter:hover > div {
+  display: flex;
+  z-index: 100;
+}
+
+.filter > div {
+  display: none;
+  flex-direction: column;
+
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  padding: 10px 0px 10px 0px;
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 6px;
+  min-width: 130px;
+  max-width: 200px;
+
+  animation: displaymenu 0.5s;
+}
+.filter > div > p {
+  font-size: 0.8rem;
+  border-radius: 6px;
+  word-break: break-all;
+  text-align: left;
+  padding: 5px 10px 5px 10px;
+}
+
+.filter > div > p:hover {
+  transition: all 0.5s;
+  color: white;
+  background-color: black;
+}
+
+.filter > div > p:active {
+  transform: scale(0.95);
+}
+
+@keyframes displaymenu {
+  from {
+    top: 0px;
+    opacity: 0;
+  }
+  to {
+    top: 30px;
+    opacity: 1;
+  }
+}

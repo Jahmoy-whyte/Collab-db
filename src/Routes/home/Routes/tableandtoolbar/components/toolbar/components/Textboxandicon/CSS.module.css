@@ -1,0 +1,17 @@
+.textboxdiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 6px;
+
+  gap: 5px;
+  border: 0.5px solid gray;
+  max-width: 200px;
+  height: 30px;
+}
+.textboxdiv > input {
+  flex: 1;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}

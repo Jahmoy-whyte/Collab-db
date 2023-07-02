@@ -1,0 +1,12 @@
+.buttoncss {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex: 1;
+  padding: 5px;
+  border-radius: 6px;
+  border: none;
+}
