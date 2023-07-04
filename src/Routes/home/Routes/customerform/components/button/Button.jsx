@@ -1,9 +1,14 @@
 import css from "./CSS.module.css";
-import { CircleLoader } from "react-spinners";
-const Button = ({ loading, txt, color = "black" }) => {
+import { ClipLoader } from "react-spinners";
+const Button = ({ loading, txt, color = "black", fn }) => {
   return (
-    <button className={css.buttoncss} style={{ backgroundColor: color }}>
-      {loading ? <CircleLoader /> : txt}
+    <button
+      disabled={loading}
+      onClick={() => fn()}
+      className={css.buttoncss}
+      style={{ backgroundColor: color }}
+    >
+      {loading ? <ClipLoader color="white" size={12} /> : txt}
     </button>
   );
 };

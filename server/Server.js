@@ -3,14 +3,13 @@ import http from "http";
 import { Server } from "socket.io";
 import { randomUUID } from "crypto";
 import cors from "cors";
-import {
-  userjoined,
-  disconnectuser,
-  userconnected,
-} from "./Userdatabase_functions.js";
+import { userjoined, disconnectuser } from "./Userdatabase_functions.js";
 import {
   getCustomerinfo,
   getSearchCustomerinfo,
+  insertdata,
+  DB_UpdateRow,
+  DB_DeleteRow,
 } from "./Customerstable_functions.js";
 
 const app = express();
@@ -40,11 +39,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  //socket.on("customerinfo-res", ()=>{
-
-  //})
-
-  // user disconnected form server
   socket.on("disconnect", async () => {
     try {
       const res = await disconnectuser(socket.id);
@@ -53,6 +47,11 @@ io.on("connection", (socket) => {
     } catch (error) {
       socket.emit("userdisconnected", { res: error, status: "nok" });
     }
+  });
+
+  socket.on("tablemodified", (data) => {
+    socket.emit("tablemodified-res", data);
+    socket.broadcast.emit("tablemodified-res", data);
   });
 });
 
@@ -72,12 +71,46 @@ app.get("/customerdata", async (req, res) => {
   }
 });
 
-app.get("/customerdatasearch/:column/:searchtxt", async (req, res) => {
+app.get("/customerdata/:column/:searchtxt", async (req, res) => {
   try {
     const column = req.params.column;
     const searchtxt = req.params.searchtxt;
     const data = await getSearchCustomerinfo(column, searchtxt);
     res.json({ res: data, status: "ok" });
+  } catch (error) {
+    res.status(400);
+    res.json({ res: error, status: "nok" });
+  }
+});
+
+app.post("/customerdata", async (req, res) => {
+  try {
+    const rowdata = req.body;
+    const responce = await insertdata(rowdata);
+    res.json({ res: responce, status: "ok" });
+  } catch (error) {
+    res.status(400);
+    res.json({ res: error, status: "nok" });
+  }
+});
+
+app.put("/customerdata/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const rowdata = req.body;
+    const responce = await DB_UpdateRow(id, rowdata);
+    res.json({ res: responce, status: "ok" });
+  } catch (error) {
+    res.status(400);
+    res.json({ res: error, status: "nok" });
+  }
+});
+
+app.delete("/customerdata/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const responce = await DB_DeleteRow(id);
+    res.json({ res: responce, status: "ok" });
   } catch (error) {
     res.status(400);
     res.json({ res: error, status: "nok" });

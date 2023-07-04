@@ -60,6 +60,10 @@
   transform: scale(0.95);
 }
 
+.filter > div > p:hover {
+  cursor: pointer;
+}
+
 @keyframes displaymenu {
   from {
     top: 0px;

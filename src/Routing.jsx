@@ -1,7 +1,11 @@
 import Joinpage from "./Routes/joinpage/Joinpage";
 import Selectcolourspage from "./Routes/Selectcolours/Selectcolourspage";
 import Homedbpage from "./Routes/home/Homedbpage";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Userinfo_context } from "./context/Userinfo_context";
 import { useState } from "react";
@@ -17,11 +21,21 @@ const Routing = () => {
     },
     {
       path: "/selectcolours",
-      element: <Selectcolourspage />,
+      element:
+        userinfo.username === "" ? (
+          <Navigate to={"/"} replace={true} />
+        ) : (
+          <Selectcolourspage />
+        ),
     },
     {
       path: "/homedb",
-      element: <Homedbpage />,
+      element:
+        userinfo.username === "" ? (
+          <Navigate to={"/"} replace={true} />
+        ) : (
+          <Homedbpage />
+        ),
       children: [
         {
           path: "/homedb/",
@@ -38,6 +52,11 @@ const Routing = () => {
     {
       path: "/forms",
       element: <Customerform />,
+    },
+
+    {
+      path: "*",
+      element: <div>error</div>,
     },
   ]);
 

@@ -23,7 +23,6 @@ const Homedbpage = () => {
           <Loading />
         ) : (
           <>
-            <button onClick={() => nav("/homedb/form")}>navtest</button>
             <Outlet
               context={[
                 onlineusers,
@@ -33,6 +32,7 @@ const Homedbpage = () => {
                 selectfilter,
                 fn_searchtext,
                 searchloading,
+                nav,
               ]}
             />
           </>

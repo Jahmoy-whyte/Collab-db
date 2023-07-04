@@ -1,8 +1,17 @@
 import css from "./CSS.module.css";
 
-const TableRows = ({ data, showcolumn, columns }) => {
+const TableRows = ({ nav, data, showcolumn, columns }) => {
   return (
-    <tr>
+    <tr
+      onClick={() =>
+        nav("/homedb/form", {
+          state: {
+            rowdata: data,
+            buttonaction: "deleteandupdate",
+          },
+        })
+      }
+    >
       {columns.map((column, index) => {
         return showcolumn.includes(column) ? (
           <td key={index}>{data[column]}</td>

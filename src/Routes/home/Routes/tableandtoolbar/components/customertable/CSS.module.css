@@ -28,3 +28,8 @@
   border-bottom: 0.5px solid #f2f2f2;
   font-size: 0.8rem;
 }
+
+.tablediv > table > tbody > tr:hover > td {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}

@@ -14,3 +14,11 @@
   color: white;
   font-size: 0.8rem;
 }
+
+.buttonandtxt:hover {
+  cursor: pointer;
+}
+
+.buttonandtxt:active {
+  transform: scale(0.95);
+}

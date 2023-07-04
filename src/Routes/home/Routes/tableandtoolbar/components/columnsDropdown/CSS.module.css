@@ -67,6 +67,10 @@
   transform: scale(0.95);
 }
 
+.csdropdownlistdivitem > label:hover {
+  cursor: pointer;
+}
+
 @keyframes displaymenu {
   from {
     top: 0px;

@@ -1,7 +1,12 @@
-import { useEffect, useContext, useState, useCallback } from "react";
+import { useEffect, useContext, useState, useCallback, useRef } from "react";
 import { io } from "socket.io-client";
 import { Userinfo_context } from "../../context/Userinfo_context";
 import { toast } from "react-toastify";
+import { Getuuid } from "../../database-functions/UserTable_functions";
+import {
+  DB_Getcustomertabledata,
+  DB_Getsearchinfo,
+} from "../../database-functions/Customertable_function";
 const useHome = () => {
   const [userinfo, setuserinfo] = useContext(Userinfo_context);
   const [onlineusers, setonlineusers] = useState({ loading: true, users: [] });
@@ -30,14 +35,16 @@ const useHome = () => {
 
     socket.on("connect", async () => {
       try {
+        setuserinfo((prev) => ({ ...prev, socket: socket }));
         console.log(socket.id);
-        const id = await getuuid();
+        const id = await getuserid();
         socket.emit("userjoined", {
           uuid: id,
           username: userinfo.username,
           usercolor: userinfo.colour,
         }); //socketid will be add on with sent to server
       } catch (error) {
+        toast.error("Error occurred whilst getting id");
         console.log(error);
       }
     });
@@ -45,14 +52,14 @@ const useHome = () => {
     socket.on("userjoined-res", async (data) => {
       try {
         if (data.status === "nok") throw new Error(data.res.code);
-        const id = await getuuid();
+        const id = await getuserid();
         console.log(data);
         setonlineusers({
           loading: false,
           users: data.res.filter((users) => users.uuid !== socket),
         });
       } catch (error) {
-        toast.error("Error getting user info");
+        toast.error("Error  occurred whilst getting user info");
         console.log(error);
       }
     });
@@ -60,15 +67,37 @@ const useHome = () => {
     socket.on("userdisconnected", async (data) => {
       try {
         if (data.status === "nok") throw new Error(data.res.code);
-        const id = await getuuid();
+        const id = await getuserid();
         //   console.log(data);
         setonlineusers((prev) => ({
           ...prev,
           users: data.res.filter((users) => users.uuid !== socket),
         }));
       } catch (error) {
-        toast.error("Error userdisconnected");
+        toast.error("Error occurred on userdisconnected");
         console.log(error);
+      }
+    });
+
+    socket.on("tablemodified-res", (data) => {
+      console.log(data);
+      if (data.action == "insert") {
+        setcustomertable((prev) => ({
+          ...prev,
+          rows: [...prev.rows, data.rowdata],
+        }));
+      } else if (data.action == "update") {
+        setcustomertable((prev) => ({
+          ...prev,
+          rows: prev.rows.map((row) => {
+            return row.id === data.rowdata.id ? data.rowdata : row;
+          }),
+        }));
+      } else if (data.action == "delete") {
+        setcustomertable((prev) => ({
+          ...prev,
+          rows: prev.rows.filter((row) => row.id !== data.rowdata.id),
+        }));
       }
     });
 
@@ -77,37 +106,27 @@ const useHome = () => {
     };
   }, []);
 
-  const getuuid = async (socket) => {
-    let id = localStorage.getItem("uuid");
-    if (!id) {
-      try {
-        const getid = await fetch("http://localhost:3000/getid");
-        const jsondata = await getid.json();
-        localStorage.setItem("uuid", jsondata.uuid);
-        id = jsondata.uuid;
-      } catch (error) {
-        throw new Error(error);
-      }
+  const getuserid = async () => {
+    let userid = localStorage.getItem("uuid");
+    if (!userid) {
+      const id = await Getuuid();
+      localStorage.setItem("uuid", id);
     }
-
-    return id;
+    return userid;
   };
+
   // =====================  populate table and togglecolumn functions ======================
   const getcustomertabledata = async () => {
     try {
-      const res = await fetch("http://localhost:3000/customerdata");
-      if (!res.ok) throw new Error("error getting customerdata");
-      const jsondata = await res.json();
-      if (jsondata.status === "nok") throw new Error(jsondata.res.code);
-
+      const responce = await DB_Getcustomertabledata();
       setcustomertable((prev) => ({
         ...prev,
         loading: false,
-        rows: jsondata.res,
+        rows: responce,
       }));
     } catch (error) {
       console.log(error);
-      toast.error("Error getting customerdata");
+      toast.error("Error occurred whilst getting customerdata");
     }
   };
 
@@ -130,25 +149,12 @@ const useHome = () => {
   );
 
   // =====================  Search and filter functions ======================
-  const selectfilter = (txt) => {
-    setcustomertable((prev) => ({
-      ...prev,
-      currentfilter: txt,
-    }));
-  };
-
-  const fn_searchtext = (txt) => {
-    setcustomertable((prev) => ({
-      ...prev,
-      searchtext: txt,
-    }));
-  };
 
   useEffect(() => {
     console.log("============ check customertable");
     if (onlineusers.loading === true) return;
     if (customertable.searchtext === "") {
-      getcustomertabledata(); // get customer
+      getcustomertabledata(); // get customer table rows
       setsearchloading(false);
       console.log("log rendertimes");
       return;
@@ -168,21 +174,30 @@ const useHome = () => {
 
   const getsearchinfo = async (column, searchtxt) => {
     try {
-      const data = await fetch(
-        `http://localhost:3000/customerdatasearch/${column}/${searchtxt}`
-      );
-      if (!data.ok) throw new Error("error getting searchdata");
-      const jsondata = await data.json();
-      if (jsondata.status === "nok") throw new Error(jsondata.res.code);
+      const responce = await DB_Getsearchinfo(column, searchtxt);
       setcustomertable((prev) => ({
         ...prev,
-        rows: jsondata.res,
+        rows: responce,
       }));
       setsearchloading(false);
     } catch (error) {
-      toast.error("Error getting searchdata");
-      console.log("getdata error  " + error);
+      toast.error("Error occurred whilst getting search");
+      console.log(error);
     }
+  };
+
+  const selectfilter = (txt) => {
+    setcustomertable((prev) => ({
+      ...prev,
+      currentfilter: txt,
+    }));
+  };
+
+  const fn_searchtext = (txt) => {
+    setcustomertable((prev) => ({
+      ...prev,
+      searchtext: txt,
+    }));
   };
 
   /*
