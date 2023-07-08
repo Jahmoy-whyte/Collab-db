@@ -30,9 +30,69 @@
   font-size: 1rem;
   color: white;
 }
-
-.useraccounts {
+.logoutbtn {
+  background-color: transparent;
+  color: white;
+  border: 0.5px solid white;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  overflow: hidden;
   position: relative;
+  z-index: 1;
+}
+.logoutbtn:hover {
+  color: black;
+}
+
+.logoutbtn:active {
+  transform: scale(0.95);
+}
+.logoutbtn:hover::before {
+  content: "";
+  display: block;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  border-radius: 6px;
+  z-index: -1;
+  animation: btnslide 0.4s;
+}
+
+@keyframes btnslide {
+  from {
+    transform: translate(-20px);
+  }
+
+  to {
+    transform: translate(0px);
+  }
+}
+
+.onlinediv {
+  gap: 10px;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.onlinediv > h3 {
+  font-size: 1.2rem;
+}
+
+.useraccountsdiv {
+  overflow: hidden;
+  overflow-x: auto;
+  gap: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;

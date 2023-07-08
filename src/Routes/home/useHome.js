@@ -6,10 +6,17 @@ import { Getuuid } from "../../database-functions/UserTable_functions";
 import {
   DB_Getcustomertabledata,
   DB_Getsearchinfo,
+  DB_pagination,
 } from "../../database-functions/Customertable_function";
+import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 const useHome = () => {
   const [userinfo, setuserinfo] = useContext(Userinfo_context);
-  const [onlineusers, setonlineusers] = useState({ loading: true, users: [] });
+  const [onlineusers, setonlineusers] = useState({
+    loading: true,
+    users: [],
+    error: false,
+  });
   const columns = [
     "id",
     "firstname",
@@ -24,42 +31,44 @@ const useHome = () => {
     showcolumn: columns,
     searchtext: "",
     currentfilter: "id",
+    page: 0,
+    pagecount: 1,
+    showFilterdropdown: false,
+    showColumndropdown: false,
+    error: false,
   });
-
+  const nav = useNavigate();
   const [searchloading, setsearchloading] = useState(false);
-
+  const { user } = useAuth0();
   useEffect(() => {
     //sessionStorage.setItem("lastname", "Smith");
     console.log("=======================  socket");
     const socket = io("http://localhost:3000/");
-
+    const id = user.sub;
     socket.on("connect", async () => {
-      try {
-        setuserinfo((prev) => ({ ...prev, socket: socket }));
-        console.log(socket.id);
-        const id = await getuserid();
-        socket.emit("userjoined", {
-          uuid: id,
-          username: userinfo.username,
-          usercolor: userinfo.colour,
-        }); //socketid will be add on with sent to server
-      } catch (error) {
-        toast.error("Error occurred whilst getting id");
-        console.log(error);
-      }
+      console.log(socket.id);
+      setuserinfo((prev) => ({ ...prev, socket: socket, uuid: id }));
+      socket.emit("userjoined", {
+        uuid: id,
+        username: userinfo.username,
+        usercolor: userinfo.colour,
+      }); //socketid will be add on with sent to server
     });
 
     socket.on("userjoined-res", async (data) => {
       try {
         if (data.status === "nok") throw new Error(data.res.code);
-        const id = await getuserid();
         console.log(data);
         setonlineusers({
           loading: false,
-          users: data.res.filter((users) => users.uuid !== socket),
+          users: data.res.filter((users) => users.uuid !== id),
         });
       } catch (error) {
         toast.error("Error  occurred whilst getting user info");
+        setonlineusers((prev) => ({
+          ...prev,
+          error: true,
+        }));
         console.log(error);
       }
     });
@@ -67,11 +76,9 @@ const useHome = () => {
     socket.on("userdisconnected", async (data) => {
       try {
         if (data.status === "nok") throw new Error(data.res.code);
-        const id = await getuserid();
-        //   console.log(data);
         setonlineusers((prev) => ({
           ...prev,
-          users: data.res.filter((users) => users.uuid !== socket),
+          users: data.res.filter((users) => users.uuid !== id),
         }));
       } catch (error) {
         toast.error("Error occurred on userdisconnected");
@@ -111,7 +118,9 @@ const useHome = () => {
     if (!userid) {
       const id = await Getuuid();
       localStorage.setItem("uuid", id);
+      userid = id;
     }
+
     return userid;
   };
 
@@ -126,6 +135,10 @@ const useHome = () => {
       }));
     } catch (error) {
       console.log(error);
+      setcustomertable((prev) => ({
+        ...prev,
+        error: true,
+      }));
       toast.error("Error occurred whilst getting customerdata");
     }
   };
@@ -200,19 +213,73 @@ const useHome = () => {
     }));
   };
 
-  /*
-  const GenID = () => {
-    const char = "xxxxxxxx-xxxx-xxxx-xxxx";
-    let newarr = char.split("");
-    let id = newarr.map((c) => {
-      let rnd1 = Math.floor(Math.random() * 123);
-      let rnd2 = Math.floor(Math.random() * 10);
-      return c !== "-" ? (rnd1 < 97 ? rnd2 : String.fromCharCode(rnd1)) : "-";
-    });
-    return id;
-    // console.log(id.join(""));
+  const fn_toggledropdown = (list) => {
+    if (list === "filter") {
+      setcustomertable((prev) => ({
+        ...prev,
+        showFilterdropdown: !customertable.showFilterdropdown,
+      }));
+    } else if (list === "column") {
+      setcustomertable((prev) => ({
+        ...prev,
+        showColumndropdown: !customertable.showColumndropdown,
+      }));
+    }
   };
-  */
+
+  const fn_addbtn = () => {
+    const rowdata = {
+      id: "Auto increment",
+      firstname: "",
+      lastname: "",
+      gender: "Male",
+      address: "",
+      created_at: "",
+    };
+    nav("/homedb/form", {
+      state: {
+        rowdata: rowdata,
+        buttonaction: "add",
+      },
+    });
+  };
+
+  const rowclick = (rowdata) => {
+    nav("/homedb/form", {
+      state: {
+        rowdata: rowdata,
+        buttonaction: "deleteandupdate",
+      },
+    });
+  };
+
+  const db_pagination = async (action) => {
+    let page = 0;
+    let pagecount = 1;
+    let rows = [];
+    try {
+      if (action === "next") {
+        page = customertable.page + 20;
+        pagecount = customertable.pagecount + 1;
+        rows = await DB_pagination(page);
+      } else {
+        page = customertable.page - 20;
+        if (page < 0) return;
+        pagecount = customertable.pagecount - 1;
+        rows = await DB_pagination(page);
+      }
+
+      setcustomertable((prev) => ({
+        ...prev,
+        rows: rows,
+        page: page,
+        pagecount: pagecount,
+      }));
+    } catch (error) {
+      console.log(error);
+      toast.error("Error occurred getting page");
+    }
+  };
   return [
     onlineusers,
     customertable,
@@ -221,6 +288,10 @@ const useHome = () => {
     selectfilter,
     fn_searchtext,
     searchloading,
+    rowclick,
+    db_pagination,
+    fn_toggledropdown,
+    fn_addbtn,
   ];
 };
 

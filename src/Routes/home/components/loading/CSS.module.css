@@ -5,3 +5,20 @@
   flex-direction: column;
   flex: 1;
 }
+
+.loadingdiv > p {
+  margin-top: 5px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.loadingdiv > button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 6px;
+}
+.loadingdiv > button:active {
+  transform: scale(0.95);
+}

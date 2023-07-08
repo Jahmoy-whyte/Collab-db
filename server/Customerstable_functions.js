@@ -51,6 +51,15 @@ export const DB_DeleteRow = async (id) => {
   return res;
 };
 
+export const DB_pagination = async (start) => {
+  console.log(start);
+
+  const querystr = `SELECT * FROM Customer_tb LIMIT ${20} OFFSET ${start}`;
+  const [res] = await conn.execute(querystr);
+  console.log(res);
+  return res;
+};
+
 const getquerystring = (column) => {
   let querystr = "";
   if (column === "id") {

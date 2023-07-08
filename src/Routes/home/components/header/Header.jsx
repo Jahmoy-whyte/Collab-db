@@ -1,41 +1,49 @@
 import css from "./CSS.module.css";
-import Usericons from "./components/usericons/Usericons";
+import Usericons from "../usericons/Usericons";
 import dbimg from "../../../../assets/images/database1light.svg";
-
+import { useAuth0 } from "@auth0/auth0-react";
+import { Userinfo_context } from "../../../../context/Userinfo_context";
+import { useContext } from "react";
 const Header = ({ onlineusers }) => {
+  const { logout } = useAuth0();
+  const [userinfo, setuserinfo] = useContext(Userinfo_context);
   return (
-    <div className={css.headingbardiv}>
-      <div className={css.iconandtitlediv}>
-        <img src={dbimg} />
-        <div>
-          <h1>Collab db</h1>
+    <>
+      <div className={css.headingbardiv}>
+        <div className={css.iconandtitlediv}>
+          <img src={dbimg} />
+          <div>
+            <h1>Collab db</h1>
+          </div>
         </div>
-      </div>
-      <div className={css.useraccounts}>
-        {onlineusers.users.map((userdata, index) => {
-          if (index < 2) {
-            return (
-              <Usericons
-                key={userdata.uuid}
-                name={userdata.username}
-                colour={userdata.colour}
-                num={index}
-              />
-            );
-          }
-        })}
 
-        {onlineusers.users.length > 2 ? (
-          <Usericons
-            key={"number"}
-            name={String(onlineusers.users.length - 2)}
-            colour={"black"}
-            added="+"
-            num={2}
-          />
-        ) : null}
+        <button className={css.logoutbtn} onClick={() => logout()}>
+          Logout
+        </button>
       </div>
-    </div>
+      {onlineusers.loading === false ? (
+        <div className={css.onlinediv}>
+          <h3>Online:</h3>
+          <div className={css.useraccountsdiv}>
+            <Usericons
+              key={userinfo.uuid}
+              name={userinfo.username}
+              colour={userinfo.colour}
+            />
+
+            {onlineusers.users.map((userdata, index) => {
+              return (
+                <Usericons
+                  key={userdata.uuid}
+                  name={userdata.username}
+                  colour={userdata.colour}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 };
 

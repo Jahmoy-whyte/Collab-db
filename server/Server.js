@@ -3,13 +3,18 @@ import http from "http";
 import { Server } from "socket.io";
 import { randomUUID } from "crypto";
 import cors from "cors";
-import { userjoined, disconnectuser } from "./Userdatabase_functions.js";
+import {
+  userjoined,
+  disconnectuser,
+  rowclick,
+} from "./Userdatabase_functions.js";
 import {
   getCustomerinfo,
   getSearchCustomerinfo,
   insertdata,
   DB_UpdateRow,
   DB_DeleteRow,
+  DB_pagination,
 } from "./Customerstable_functions.js";
 
 const app = express();
@@ -49,16 +54,28 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("rowclick", async (data) => {
+    console.log(data);
+    try {
+      const res = await rowclick(data.uuid, data.selectedrowid);
+      // socket.broadcast.emit("rowclick-res", { res: res, status: "ok" });
+      socket.broadcast.emit("userjoined-res", { res: res, status: "ok" });
+    } catch (error) {
+      socket.broadcast.emit("userjoined-res", { res: error, status: "nok" });
+    }
+  });
+
   socket.on("tablemodified", (data) => {
     socket.emit("tablemodified-res", data);
     socket.broadcast.emit("tablemodified-res", data);
   });
 });
-
+//  =====================  User table data ==================================
 app.get("/getid", (req, res) => {
   let uuid = randomUUID();
   res.json({ uuid: uuid });
 });
+
 //  =====================  customer table data ==================================
 
 app.get("/customerdata", async (req, res) => {
@@ -113,6 +130,18 @@ app.delete("/customerdata/:id", async (req, res) => {
     res.json({ res: responce, status: "ok" });
   } catch (error) {
     res.status(400);
+    res.json({ res: error, status: "nok" });
+  }
+});
+
+app.get("/customerdata/:start", async (req, res) => {
+  try {
+    const start = req.params.start;
+    const responce = await DB_pagination(start);
+    res.json({ res: responce, status: "ok" });
+  } catch (error) {
+    // res.status(400);
+    console.log(error);
     res.json({ res: error, status: "nok" });
   }
 });

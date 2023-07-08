@@ -7,13 +7,14 @@ import {
 } from "../../../../database-functions/Customertable_function";
 import { toast } from "react-toastify";
 import { Userinfo_context } from "../../../../context/Userinfo_context";
+
 const useCustomer = () => {
   const loc = useLocation();
-  //const nav = useNavigate();
-  const rowdata = loc.state.rowdata;
-  const buttonaction = loc.state.buttonaction;
+  const nav = useNavigate();
+  const rowdata = loc.state?.rowdata;
+  const buttonaction = loc.state?.buttonaction;
   const [userinfo, setuserinfo] = useContext(Userinfo_context);
-
+  const [mount, setmount] = useState(false);
   const [isloading, setisloading] = useState({
     update: false,
     delete: false,
@@ -28,6 +29,25 @@ const useCustomer = () => {
     created_at: rowdata?.created_at,
   });
 
+  useEffect(() => {
+    if (mount === false) {
+      setmount(true);
+      return;
+    }
+
+    userinfo.socket.emit("rowclick", {
+      uuid: userinfo.uuid,
+      selectedrowid: rowdata?.id,
+    });
+
+    return () => {
+      userinfo.socket.emit("rowclick", {
+        uuid: userinfo.uuid,
+        selectedrowid: "",
+      });
+    };
+  }, [mount]);
+
   const fnsettxt = (textbox, txtval) => {
     if (textbox === "Firstname") {
       settxt((prev) => ({ ...prev, firstname: txtval }));
@@ -39,10 +59,31 @@ const useCustomer = () => {
       settxt((prev) => ({ ...prev, address: txtval }));
     }
   };
+
+  const fnchecktxt = () => {
+    let bool = true;
+    if (txt.firstname === "") {
+      toast.info("Please enter firstname");
+      bool = false;
+    } else if (txt.lastname === "") {
+      toast.info("Please enter lastname");
+      bool = false;
+    } else if (txt.gender === "") {
+      toast.info("Please enter gender");
+      bool = false;
+    } else if (txt.address === "") {
+      toast.info("Please enter address");
+      bool = false;
+    }
+
+    return bool;
+  };
+
   // useEffect(() => {}, []);
 
   const addrow = async () => {
     try {
+      if (!fnchecktxt()) return;
       setisloading((prev) => ({ ...prev, insert: true }));
       const insertedrowdata = await DB_Insertdata(txt);
       userinfo.socket.emit("tablemodified", {
@@ -50,6 +91,7 @@ const useCustomer = () => {
         rowdata: insertedrowdata[0],
       });
       toast.success("Row insert successful");
+      nav(-1);
       setisloading((prev) => ({ ...prev, insert: false }));
     } catch (error) {
       setisloading((prev) => ({ ...prev, insert: false }));
@@ -60,13 +102,16 @@ const useCustomer = () => {
 
   const updaterow = async () => {
     try {
+      if (!fnchecktxt()) return;
       setisloading((prev) => ({ ...prev, update: true }));
       const responce = await DB_Updatedata(txt.id, txt);
       userinfo.socket.emit("tablemodified", {
         action: "update",
         rowdata: txt,
       });
+
       toast.success("Row Update successful");
+      nav(-1);
       setisloading((prev) => ({ ...prev, update: false }));
     } catch (error) {
       setisloading((prev) => ({ ...prev, update: false }));
@@ -84,6 +129,7 @@ const useCustomer = () => {
         rowdata: txt,
       });
       toast.success("Row delete successful");
+      nav(-1);
       setisloading((prev) => ({ ...prev, delete: false }));
     } catch (error) {
       setisloading((prev) => ({ ...prev, delete: false }));
@@ -92,7 +138,16 @@ const useCustomer = () => {
     }
   };
 
-  return [txt, fnsettxt, buttonaction, addrow, updaterow, deleterow, isloading];
+  return [
+    txt,
+    fnsettxt,
+    buttonaction,
+    addrow,
+    updaterow,
+    deleterow,
+    isloading,
+    nav,
+  ];
 };
 
 export default useCustomer;

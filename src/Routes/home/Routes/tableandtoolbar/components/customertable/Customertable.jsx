@@ -1,7 +1,13 @@
 import css from "./CSS.module.css";
 import Loading from "../../../../components/loading/Loading";
 import TableRows from "../tablerows/TableRows";
-const Customertable = ({ nav, columns, customertable, searchloading }) => {
+const Customertable = ({
+  onlineusers,
+  rowclick,
+  columns,
+  customertable,
+  searchloading,
+}) => {
   return (
     <div className={css.tablediv}>
       <table>
@@ -20,12 +26,13 @@ const Customertable = ({ nav, columns, customertable, searchloading }) => {
               </td>
             </tr>
           ) : (
-            customertable.rows.map((data) => (
+            customertable.rows.map((rowdata) => (
               <TableRows
-                nav={nav}
-                data={data}
+                onlineusers={onlineusers}
+                rowclick={rowclick}
+                rowdata={rowdata}
                 showcolumn={customertable.showcolumn}
-                key={data.id}
+                key={rowdata.id}
                 columns={columns}
               />
             ))

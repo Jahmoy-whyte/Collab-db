@@ -42,6 +42,12 @@ export const DB_Deletedata = async (id) => {
   return await checkresponce(response, "error deleting data");
 };
 
+export const DB_pagination = async (start) => {
+  const responce = await fetch(`http://localhost:3000/customerdata/${start}`);
+
+  return await checkresponce(responce, "error getting page");
+};
+
 const checkresponce = async (response, errormsg) => {
   if (!response.ok) throw new Error(errormsg);
   const jsondata = await response.json();

@@ -1,4 +1,3 @@
-import Joinpage from "./Routes/joinpage/Joinpage";
 import Selectcolourspage from "./Routes/Selectcolours/Selectcolourspage";
 import Homedbpage from "./Routes/home/Homedbpage";
 import {
@@ -8,34 +7,52 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Userinfo_context } from "./context/Userinfo_context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Customerform from "./Routes/home/Routes/customerform/Customerform";
 import Toolbarandtable from "./Routes/home/Routes/tableandtoolbar/Toolbarandtable";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth0 } from "@auth0/auth0-react";
+import ProtectedRoutes from "./ProtectedRoutes";
+import { SyncLoader } from "react-spinners";
+
 const Routing = () => {
-  const [userinfo, setuserinfo] = useState({ username: "", colour: null });
+  const [userinfo, setuserinfo] = useState({
+    username: "",
+    colour: null,
+    uuid: null,
+    socket: null,
+  });
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <div className={"authloadingdiv"}>
+        <SyncLoader color="black" size={15} />
+      </div>
+    );
+  }
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Joinpage />,
-    },
-    {
-      path: "/selectcolours",
-      element:
-        userinfo.username === "" ? (
-          <Navigate to={"/"} replace={true} />
-        ) : (
-          <Selectcolourspage />
-        ),
+      element: (
+        <ProtectedRoutes
+          isAuth={isAuthenticated}
+          Element={Selectcolourspage}
+          loginpage={loginWithRedirect}
+        />
+      ),
     },
     {
       path: "/homedb",
-      element:
-        userinfo.username === "" ? (
-          <Navigate to={"/"} replace={true} />
-        ) : (
-          <Homedbpage />
-        ),
+      element: (
+        <ProtectedRoutes
+          isAuth={isAuthenticated}
+          Element={Homedbpage}
+          colour={userinfo.colour}
+          testforcolour={true}
+          loginpage={loginWithRedirect}
+        />
+      ),
       children: [
         {
           path: "/homedb/",
@@ -56,7 +73,7 @@ const Routing = () => {
 
     {
       path: "*",
-      element: <div>error</div>,
+      element: <Navigate to="/" />,
     },
   ]);
 

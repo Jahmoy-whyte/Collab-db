@@ -3,7 +3,7 @@ import css from "./hompage.module.css";
 import Header from "./components/header/Header";
 import Loading from "./components/loading/Loading";
 
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 const Homedbpage = () => {
   const [
     onlineusers,
@@ -13,14 +13,22 @@ const Homedbpage = () => {
     selectfilter,
     fn_searchtext,
     searchloading,
+    rowclick,
+    db_pagination,
+    fn_toggledropdown,
+    fn_addbtn,
   ] = useHome();
-  const nav = useNavigate();
+
   return (
     <>
       <div className={css.maincontainer}>
         <Header onlineusers={onlineusers} key={"header"} />
         {customertable.loading ? (
-          <Loading />
+          <Loading
+            txt={"It may take a while to connect to server.."}
+            tableerror={customertable.error}
+            usererror={onlineusers.error}
+          />
         ) : (
           <>
             <Outlet
@@ -32,7 +40,10 @@ const Homedbpage = () => {
                 selectfilter,
                 fn_searchtext,
                 searchloading,
-                nav,
+                rowclick,
+                db_pagination,
+                fn_toggledropdown,
+                fn_addbtn,
               ]}
             />
           </>

@@ -1,15 +1,8 @@
 import css from "./CSS.module.css";
-const Buttonandicon = ({ txt, width = 0, icon, nav, rowdata }) => {
+const Buttonandicon = ({ txt, width = 0, icon, fn_addbtn }) => {
   return (
     <button
-      onClick={() =>
-        nav("/homedb/form", {
-          state: {
-            rowdata: rowdata,
-            buttonaction: true,
-          },
-        })
-      }
+      onClick={() => fn_addbtn()}
       className={css.buttonandtxt}
       style={{ width: width != 0 ? width : null }}
     >

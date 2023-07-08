@@ -1,0 +1,36 @@
+.usericons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  width: 30px;
+  height: 30px;
+  background-color: red;
+}
+
+.usericons > h3 {
+  color: white;
+  font-size: 0.7rem;
+}
+
+.iconanddiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-left: 0.5px solid #b3b3b3;
+  padding-left: 10px;
+  padding-right: 10px;
+  gap: 5px;
+}
+
+.iconanddiv > span > h3 {
+  font-size: 0.8rem;
+  font-weight: 100;
+  color: black;
+}
+
+.iconanddiv > span > p {
+  font-size: 0.7rem;
+  color: #b3b3b3;
+}

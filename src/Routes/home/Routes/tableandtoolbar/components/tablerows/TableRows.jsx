@@ -1,20 +1,20 @@
 import css from "./CSS.module.css";
 
-const TableRows = ({ nav, data, showcolumn, columns }) => {
+const TableRows = ({ onlineusers, rowclick, rowdata, showcolumn, columns }) => {
+  const res = onlineusers.users.findIndex(
+    (user) => user.selectedrowid == rowdata.id
+  );
+
   return (
     <tr
-      onClick={() =>
-        nav("/homedb/form", {
-          state: {
-            rowdata: data,
-            buttonaction: "deleteandupdate",
-          },
-        })
-      }
+      onClick={() => rowclick(rowdata)}
+      style={{
+        border: res > -1 ? "1px solid" + onlineusers.users[res].colour : "none",
+      }}
     >
       {columns.map((column, index) => {
         return showcolumn.includes(column) ? (
-          <td key={index}>{data[column]}</td>
+          <td key={index}>{rowdata[column]}</td>
         ) : null;
       })}
     </tr>

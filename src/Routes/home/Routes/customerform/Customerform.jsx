@@ -1,5 +1,5 @@
 import css from "./CSS.module.css";
-import dbimg from "../../../../assets/images/database3.svg";
+import dbimg from "../../../../assets/images/database1.svg";
 import backarrow from "../../../../assets/images/backarrow.svg";
 import Labelandinput from "./components/labelandinput/Labelandinput";
 import Labelanddropdown from "./components/labelanddropdown/Labelanddropdown";
@@ -15,6 +15,7 @@ const Customerform = () => {
     updaterow,
     deleterow,
     isloading,
+    nav,
   ] = useCustomer();
 
   return (
@@ -22,7 +23,6 @@ const Customerform = () => {
       <div className={css.formandbuttoncontainer}>
         <form className={css.formtag}>
           <div className={css.dbiconandtitlediv}>
-            <img src={dbimg} />
             <h1>Collab db</h1>
           </div>
           <p>Customers Information</p>
@@ -61,13 +61,13 @@ const Customerform = () => {
         </form>
 
         <div className={css.Buttonsdiv}>
-          <div className={css.backbuttondiv}>
+          <button className={css.backbuttondiv} onClick={() => nav(-1)}>
             <img src={backarrow} />
             <div>
-              <h4>back</h4>
-              <p>Go back to home page.</p>
+              <h4>Back</h4>
+              <p>Go back to table.</p>
             </div>
-          </div>
+          </button>
 
           <div className={css.buttondiv}>
             {buttonaction === "deleteandupdate" ? (
