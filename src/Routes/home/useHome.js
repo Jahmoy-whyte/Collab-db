@@ -44,7 +44,7 @@ const useHome = () => {
   useEffect(() => {
     //sessionStorage.setItem("lastname", "Smith");
     console.log("=======================  socket");
-    const socket = io("http://collabdb-server.onrender.com");
+    const socket = io("https://collabdb-server.onrender.com");
     const id = user.sub;
     socket.on("connect", async () => {
       console.log(socket.id);

@@ -1,20 +1,20 @@
 export const DB_Getcustomertabledata = async () => {
   const response = await fetch(
-    "http://collabdb-server.onrender.com/customerdata"
+    "https://collabdb-server.onrender.com/customerdata"
   );
   return await checkresponce(response, "error getting customerdata");
 };
 
 export const DB_Getsearchinfo = async (column, searchtxt) => {
   const response = await fetch(
-    `http://collabdb-server.onrender.com/customerdata/${column}/${searchtxt}`
+    `https://collabdb-server.onrender.com/customerdata/${column}/${searchtxt}`
   );
   return await checkresponce(response, "error getting searchdata");
 };
 
 export const DB_Insertdata = async (txt) => {
   const response = await fetch(
-    "http://collabdb-server.onrender.com/customerdata",
+    "https://collabdb-server.onrender.com/customerdata",
     {
       method: "POST",
       headers: {
@@ -29,7 +29,7 @@ export const DB_Insertdata = async (txt) => {
 
 export const DB_Updatedata = async (id, rowdata) => {
   const response = await fetch(
-    `http://collabdb-server.onrender.com/customerdata/${id}`,
+    `https://collabdb-server.onrender.com/customerdata/${id}`,
     {
       method: "PUT",
       headers: {
@@ -44,7 +44,7 @@ export const DB_Updatedata = async (id, rowdata) => {
 
 export const DB_Deletedata = async (id) => {
   const response = await fetch(
-    `http://collabdb-server.onrender.com/customerdata/${id}`,
+    `https://collabdb-server.onrender.com/customerdata/${id}`,
     {
       method: "DELETE",
     }
@@ -55,7 +55,7 @@ export const DB_Deletedata = async (id) => {
 
 export const DB_pagination = async (start) => {
   const responce = await fetch(
-    `http://collabdb-server.onrender.com/customerdata/${start}`
+    `https://collabdb-server.onrender.com/customerdata/${start}`
   );
 
   return await checkresponce(responce, "error getting page");
