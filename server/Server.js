@@ -150,6 +150,8 @@ app.get("/", (req, res) => {
   res.send("server is up and running");
 });
 
-httpserver.listen(3000, () => {
-  console.log("server started on port 3000");
+httpserver.listen(process.env.PORT || 3000, () => {
+  console.log("server started on port " + process.env.PORT);
 });
+
+//collabdb-server.onrender.com
