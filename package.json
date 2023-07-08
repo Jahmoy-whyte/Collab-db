@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "nodemon ./server/Server.js"
+    "start": "./server/Server.js"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.1.1",
