@@ -3,11 +3,7 @@ import { io } from "socket.io-client";
 import { Userinfo_context } from "../../context/Userinfo_context";
 import { toast } from "react-toastify";
 import { Getuuid } from "../../databasefunctions/UserTable_functions";
-import {
-  DB_Getcustomertabledata,
-  DB_Getsearchinfo,
-  DB_pagination,
-} from "../../databasefunctions/Customertable_function";
+
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 const useHome = () => {

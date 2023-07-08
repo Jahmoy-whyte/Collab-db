@@ -26,11 +26,7 @@ app.use(
 );
 const httpserver = http.createServer(app);
 
-const io = new Server(httpserver, {
-  cors: {
-    origin: "*",
-  },
-});
+const io = new Server(httpserver);
 
 io.on("connection", (socket) => {
   console.log("they joined " + socket.id);
