@@ -1,6 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import {
+  DB_Insertdata,
+  DB_Updatedata,
+  DB_Deletedata,
+} from "../../../../databasefunctions/CusTable_functions";
 import { toast } from "react-toastify";
 import { Userinfo_context } from "../../../../context/Userinfo_context";
 
