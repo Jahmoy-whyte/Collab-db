@@ -4,7 +4,7 @@ import {
   DB_Insertdata,
   DB_Updatedata,
   DB_Deletedata,
-} from "../../../../database-functions/Customertable_function";
+} from "../../../../databasefunctions/Customertable_function";
 import { toast } from "react-toastify";
 import { Userinfo_context } from "../../../../context/Userinfo_context";
 

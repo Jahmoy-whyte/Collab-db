@@ -19,7 +19,11 @@ import {
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 const httpserver = http.createServer(app);
 
 const io = new Server(httpserver, {

@@ -2,12 +2,12 @@ import { useEffect, useContext, useState, useCallback, useRef } from "react";
 import { io } from "socket.io-client";
 import { Userinfo_context } from "../../context/Userinfo_context";
 import { toast } from "react-toastify";
-import { Getuuid } from "../../database-functions/UserTable_functions";
+import { Getuuid } from "../../databasefunctions/UserTable_functions";
 import {
   DB_Getcustomertabledata,
   DB_Getsearchinfo,
   DB_pagination,
-} from "../../database-functions/Customertable_function";
+} from "../../databasefunctions/Customertable_function";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 const useHome = () => {
@@ -43,7 +43,7 @@ const useHome = () => {
   useEffect(() => {
     //sessionStorage.setItem("lastname", "Smith");
     console.log("=======================  socket");
-    const socket = io("http://localhost:3000/");
+    const socket = io("http://collabdb-server.onrender.com");
     const id = user.sub;
     socket.on("connect", async () => {
       console.log(socket.id);
