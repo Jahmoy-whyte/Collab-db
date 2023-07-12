@@ -1,10 +1,6 @@
 import Selectcolourspage from "./Routes/Selectcolours/Selectcolourspage";
 import Homedbpage from "./Routes/home/Homedbpage";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from "react-router-dom";
+import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Userinfo_context } from "./context/Userinfo_context";
 import { useState, useEffect } from "react";
@@ -13,7 +9,8 @@ import Toolbarandtable from "./Routes/home/Routes/tableandtoolbar/Toolbarandtabl
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import ProtectedRoutes from "./ProtectedRoutes";
-import { SyncLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
+import Landingpage from "./Routes/landingpage/Landingpage";
 
 const Routing = () => {
   const [userinfo, setuserinfo] = useState({
@@ -27,11 +24,11 @@ const Routing = () => {
   if (isLoading) {
     return (
       <div className={"authloadingdiv"}>
-        <SyncLoader color="black" size={15} />
+        <BarLoader color="black" size={15} />
       </div>
     );
   }
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: "/",
       element: (

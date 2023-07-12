@@ -16,7 +16,10 @@
   background-color: black;
   color: white;
   border: none;
-  padding: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 6px;
 }
 .loadingdiv > button:active {

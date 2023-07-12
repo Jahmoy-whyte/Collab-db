@@ -1,5 +1,5 @@
 import css from "./CSS.module.css";
-import { SyncLoader } from "react-spinners";
+import { BarLoader } from "react-spinners";
 
 const Loading = ({
   cu_size,
@@ -11,7 +11,7 @@ const Loading = ({
     <div className={css.loadingdiv}>
       {!tableerror && !usererror ? (
         <>
-          <SyncLoader color="black" size={cu_size ? cu_size : 15} />
+          <BarLoader color="black" size={cu_size ? cu_size : 15} />
           {txt !== null ? <p>{txt}</p> : null}
         </>
       ) : (

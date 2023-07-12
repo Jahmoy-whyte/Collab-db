@@ -1,0 +1,151 @@
+.maincontainer {
+  display: flex;
+  flex-direction: column;
+  background-color: paleturquoise;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.subconatiner {
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+  flex: 1;
+}
+.hero_section {
+  display: flex;
+  flex-direction: column;
+  background-color: red;
+  height: 100vh;
+  max-height: 721px;
+  overflow: hidden;
+}
+.header {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 70px;
+}
+
+.header > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.header_iconandtitle_div {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+}
+.header_iconandtitle_div > img {
+  width: 45px;
+  height: 45px;
+}
+.header_iconandtitle_div > h1 {
+  color: white;
+  font-size: 30px;
+}
+.header_button_div {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+.header_button_div > button {
+  background-color: black;
+
+  height: 35px;
+  width: 110px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.header_button_div > button:nth-child(2) {
+  background-color: white;
+  color: black;
+}
+
+.heroconatiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  flex: 1;
+
+  padding: 0px;
+}
+.hero_textandimg_div {
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 2000px;
+  width: 100%;
+  padding: 30px;
+  justify-content: space-evenly;
+}
+.hero_txtdiv {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.hero_txtdiv > h1 {
+  font-size: 2.5rem;
+  width: 512px;
+}
+.hero_txtdiv > p {
+  font-size: 20px;
+  max-width: 500px;
+}
+.hero_txtdiv > button {
+  margin-top: 10px;
+  background-color: black;
+  height: 35px;
+  width: 110px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.hero_img {
+  max-width: 1000px;
+}
+
+.bw {
+  width: 100%;
+  max-width: 400px;
+  overflow-x: visible;
+}
+
+@media screen and (max-width: 991px) {
+  /* start of large tablet styles */
+  .hero_txtdiv > h1 {
+    font-size: 2.3rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* start of medium tablet styles */
+  .hero_txtdiv > h1 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  /* start of phone styles */
+  .hero_txtdiv > h1 {
+    font-size: 1.5rem;
+  }
+}
